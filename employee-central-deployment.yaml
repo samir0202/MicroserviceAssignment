@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-central
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-central
+  template:
+    metadata:
+      labels:
+        app: employee-central
+    spec:
+      containers:
+      - name: employee-central
+        image: employee-central-image
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MONGO_URL
+          value: "mongodb://mongo-employee-central:27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-central
+spec:
+  selector:
+    app: employee-central
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

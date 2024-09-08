@@ -1,0 +1,44 @@
+version: '3'
+services:
+  employee_central:
+    build:
+      context: ./EmployeeCentral
+    container_name: employee_central
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URL=mongodb://mongodb_central:27017
+    depends_on:
+      - mongodb_central
+
+  project_central:
+    build:
+      context: ./EmployeeProject
+    container_name: project_central
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_URL=mongodb://mongodb_project:27017
+    depends_on:
+      - mongodb_project
+      - employee_central
+
+  mongodb_central:
+    image: mongo:4.4
+    container_name: mongodb_central
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_central_data:/data/db
+
+  mongodb_project:
+    image: mongo:4.4
+    container_name: mongodb_project
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_project_data:/data/db
+
+volumes:
+  mongo_central_data:
+  mongo_project_data:
