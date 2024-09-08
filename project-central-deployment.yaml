@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-central
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-central
+  template:
+    metadata:
+      labels:
+        app: project-central
+    spec:
+      containers:
+      - name: project-central
+        image: project-central-image
+        ports:
+        - containerPort: 8001
+        env:
+        - name: EMPLOYEE_CENTRAL_URL
+          value: "http://employee-central:8000"
+        - name: MONGO_URL
+          value: "mongodb://mongo-project-central:27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-central
+spec:
+  selector:
+    app: project-central
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
+  type: ClusterIP
