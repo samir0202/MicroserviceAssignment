@@ -1,0 +1,1 @@
+minikube service project-allocation-service --url
