@@ -1,0 +1,1 @@
+minikube service employee-service --url
